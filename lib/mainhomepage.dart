@@ -1,17 +1,17 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:charts/custom_container.dart';
 import 'package:charts/provider/provider.dart';
 import 'package:charts/provider/providerbottom.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class mainHomepage extends StatefulWidget {
-  mainHomepage({super.key});
+  mainHomepage({Key? key}) : super(key: key);
 
   @override
-  _mainHomepageState createState() => _mainHomepageState();
+  _MainHomepageState createState() => _MainHomepageState();
 }
 
-class _mainHomepageState extends State<mainHomepage> {
+class _MainHomepageState extends State<mainHomepage> {
   final TextEditingController xValue = TextEditingController();
   final TextEditingController yValue = TextEditingController();
 
@@ -21,7 +21,7 @@ class _mainHomepageState extends State<mainHomepage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Error'),
-          content: Text('Enter the same number of points'),
+          content: Text('Enter the same number of points for X and Y values.'),
           actions: [
             TextButton(
               child: Text('OK'),
@@ -39,15 +39,6 @@ class _mainHomepageState extends State<mainHomepage> {
   Widget build(BuildContext context) {
     final providerdropdowns = Provider.of<providerdropdown>(context);
     final providerNavigations = Provider.of<NavigationProvider>(context);
-
-    bool isEqualLength =
-        xValue.text.split(',').length == yValue.text.split(',').length;
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (!isEqualLength) {
-    //     customAlert(context);
-    //   }
-    // });
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -126,7 +117,8 @@ class _mainHomepageState extends State<mainHomepage> {
             const SizedBox(
               height: 5,
             ),
-            if (isEqualLength)
+            // Only show customContainer if the selected chart type is not "Pie Chart"
+            if (providerdropdowns.dropdownValue != 'Pie Chart')
               customContainer(
                 xValue: xValue,
                 yValue: yValue,
@@ -143,9 +135,33 @@ class _mainHomepageState extends State<mainHomepage> {
             (BuildContext context, NavigationProvider value, Widget? child) {
           return BottomNavigationBar(
             onTap: (index) {
-              List<String> xValues = xValue.text.split(',');
-              List<String> yValues = yValue.text.split(',');
-              if (!isEqualLength) {
+              // Only validate and navigate if the selected chart type is not "Pie Chart"
+              if (providerdropdowns.dropdownValue != 'Pie Chart') {
+                List<String> xValues = xValue.text.split(',');
+                List<String> yValues = yValue.text.split(',');
+
+                // Validate number of points
+                if (xValues.length != yValues.length) {
+                  // Show alert if number of points is not equal
+                  customAlert(context);
+                } else {
+                  // Navigate to the selected screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          providerNavigations.navigationProvider(
+                        context,
+                        index,
+                        chartType: providerdropdowns.dropdownValue,
+                        xValue: xValues,
+                        yValue: yValues,
+                      ),
+                    ),
+                  );
+                }
+              } else {
+                // Navigate directly if the selected chart type is "Pie Chart"
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -154,13 +170,11 @@ class _mainHomepageState extends State<mainHomepage> {
                       context,
                       index,
                       chartType: providerdropdowns.dropdownValue,
-                      xValue: xValues,
-                      yValue: yValues,
+                      xValue: [],
+                      yValue: [],
                     ),
                   ),
                 );
-              } else {
-                customAlert(context);
               }
             },
             currentIndex: providerNavigations.myIndex,
