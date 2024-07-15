@@ -117,7 +117,6 @@ class _MainHomepageState extends State<mainHomepage> {
             const SizedBox(
               height: 5,
             ),
-            // Only show customContainer if the selected chart type is not "Pie Chart"
             if (providerdropdowns.dropdownValue != 'Pie Chart')
               customContainer(
                 xValue: xValue,
@@ -135,14 +134,11 @@ class _MainHomepageState extends State<mainHomepage> {
             (BuildContext context, NavigationProvider value, Widget? child) {
           return BottomNavigationBar(
             onTap: (index) {
-              // Only validate and navigate if the selected chart type is not "Pie Chart"
               if (providerdropdowns.dropdownValue != 'Pie Chart') {
                 List<String> xValues = xValue.text.split(',');
                 List<String> yValues = yValue.text.split(',');
 
-                // Validate number of points
                 if (xValues.length != yValues.length) {
-                  // Show alert if number of points is not equal
                   customAlert(context);
                 } else {
                   // Navigate to the selected screen
@@ -161,7 +157,6 @@ class _MainHomepageState extends State<mainHomepage> {
                   );
                 }
               } else {
-                // Navigate directly if the selected chart type is "Pie Chart"
                 Navigator.push(
                   context,
                   MaterialPageRoute(
