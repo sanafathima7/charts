@@ -4,21 +4,51 @@ import 'package:charts/provider/providerbottom.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class mainHomepage extends StatelessWidget {
-  mainHomepage({
-    super.key,
-  });
+class mainHomepage extends StatefulWidget {
+  mainHomepage({super.key});
 
+  @override
+  _mainHomepageState createState() => _mainHomepageState();
+}
+
+class _mainHomepageState extends State<mainHomepage> {
   final TextEditingController xValue = TextEditingController();
-
   final TextEditingController yValue = TextEditingController();
 
-  // final TextEditingController chartType = TextEditingController();
+  void customAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text('Enter the same number of points'),
+          actions: [
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final providerdropdowns = Provider.of<providerdropdown>(context);
     final providerNavigations = Provider.of<NavigationProvider>(context);
+
+    bool isEqualLength =
+        xValue.text.split(',').length == yValue.text.split(',').length;
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (!isEqualLength) {
+    //     customAlert(context);
+    //   }
+    // });
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -29,7 +59,7 @@ class mainHomepage extends StatelessWidget {
               child: Container(
                 height: 80,
                 child: const Card(
-                  color: const Color.fromARGB(255, 149, 235, 152),
+                  color: Color.fromARGB(255, 149, 235, 152),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -40,7 +70,7 @@ class mainHomepage extends StatelessWidget {
                           size: 50,
                         ),
                       ),
-                      const SizedBox(
+                      SizedBox(
                         width: 20,
                       ),
                       Text(
@@ -63,12 +93,13 @@ class mainHomepage extends StatelessWidget {
               height: 50,
               width: 200,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  shape: BoxShape.rectangle,
-                  border: Border.all(
-                    style: BorderStyle.solid,
-                    color: Colors.black26,
-                  )),
+                borderRadius: BorderRadius.circular(20),
+                shape: BoxShape.rectangle,
+                border: Border.all(
+                  style: BorderStyle.solid,
+                  color: Colors.black26,
+                ),
+              ),
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: DropdownButton<String>(
                 value: providerdropdowns.dropdownValue,
@@ -81,7 +112,6 @@ class mainHomepage extends StatelessWidget {
                 onChanged: providerdropdowns.changeprovider,
               ),
             ),
-            // ElevatedButton(onPressed: () {}, child: Text('Go')),
             const SizedBox(
               height: 12,
             ),
@@ -96,110 +126,53 @@ class mainHomepage extends StatelessWidget {
             const SizedBox(
               height: 5,
             ),
-            customContainer(
-              xValue: xValue,
-              yValue: yValue,
-              chartType: providerdropdowns.dropdownValue,
-            ),
+            if (isEqualLength)
+              customContainer(
+                xValue: xValue,
+                yValue: yValue,
+                chartType: providerdropdowns.dropdownValue,
+              ),
             const SizedBox(
               height: 30,
             ),
-            Consumer<NavigationProvider>(
-              builder: (BuildContext context, NavigationProvider value,
-                  Widget? child) {
-                return BottomNavigationBar(
-                    onTap: (index) {
-                      // if (index == '1') {
-                      //   // if (providerdropdowns.navigationProvider.indexed[1]) {
-                      //   List<String> xValues = xValue.text.split(',');
-                      //   List<String> yValues = yValue.text.split(',');
-                      //   if (xValues.isNotEmpty || yValues.isNotEmpty) {
-                      //     // providerNavigation.viewChartFunction(context);
-                      //     providerNavigations.updatedValue(
-                      //       context: context,
-                      //       // context: context,
-                      //       xValue: xValues,
-                      //       yValue: yValues,
-                      //       chartType: providerdropdowns.dropdownValue,
-                      //     );
-                      //   }
-                      // }
-                      //else {
-
-                      List<String> xValues = xValue.text.split(',');
-                      List<String> yValues = yValue.text.split(',');
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                providerNavigations.navigationProvider(
-                              context,
-                              index,
-                              chartType: providerdropdowns.dropdownValue,
-                              xValue: xValues,
-                              yValue: yValues,
-                            ),
-                          ));
-                    },
-                    currentIndex: providerNavigations.myIndex,
-                    items: const [
-                      BottomNavigationBarItem(
-                          icon: Icon(Icons.home), label: 'home'),
-                      BottomNavigationBarItem(
-                          icon: Icon(Icons.insert_chart), label: 'View charts'),
-                      BottomNavigationBarItem(
-                          icon: Icon(Icons.saved_search),
-                          label: 'Saved charts'),
-                    ]);
-
-                // onTap: Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     ElevatedButton(
-                //       onPressed: () {
-                //         List<String> xValues = xValue.text.split(',');
-                //         List<String> yValues = yValue.text.split(',');
-                //         // if (xValues.isNotEmpty || yValues.isNotEmpty) {
-                //         Navigator.push(
-                //           context,
-                //           MaterialPageRoute(
-                //             builder: (context) => viewChart(
-                //               chartType: providerdropdowns.dropdownValue,
-                //               xValue: xValues,
-                //               yValue: yValues,
-                //             ),
-                //           ),
-                //         );
-                //         // }
-                //         ;
-                //       },
-                //       child: const Text(
-                //         'Show Chart',
-                //         style: TextStyle(
-                //           fontWeight: FontWeight.bold,
-                //           fontSize: 16,
-                //         ),
-                //       ),
-                //     ),
-                //     const SizedBox(
-                //       width: 50,
-                //     ),
-                //     ElevatedButton(
-                //       onPressed: () {},
-                //       child: const Text(
-                //         'Save Chart',
-                //         style: TextStyle(
-                //           fontWeight: FontWeight.bold,
-                //           fontSize: 16,
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
-              },
-            )
           ],
         ),
+      ),
+      bottomNavigationBar: Consumer<NavigationProvider>(
+        builder:
+            (BuildContext context, NavigationProvider value, Widget? child) {
+          return BottomNavigationBar(
+            onTap: (index) {
+              List<String> xValues = xValue.text.split(',');
+              List<String> yValues = yValue.text.split(',');
+              if (!isEqualLength) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        providerNavigations.navigationProvider(
+                      context,
+                      index,
+                      chartType: providerdropdowns.dropdownValue,
+                      xValue: xValues,
+                      yValue: yValues,
+                    ),
+                  ),
+                );
+              } else {
+                customAlert(context);
+              }
+            },
+            currentIndex: providerNavigations.myIndex,
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.insert_chart), label: 'View Charts'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.saved_search), label: 'Saved Charts'),
+            ],
+          );
+        },
       ),
     );
   }
