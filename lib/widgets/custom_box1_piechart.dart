@@ -1,17 +1,17 @@
-import 'package:charts/chart_data2.dart';
-import 'package:charts/widgets/charts/barchart.dart';
+import 'package:charts/model/chart_data1.dart';
+import 'package:charts/widgets/charts/piechart.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-class custom_box2_bar_chart extends StatelessWidget {
-  const custom_box2_bar_chart({
+class custom_box1_pie_chart extends StatelessWidget {
+  const custom_box1_pie_chart({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Box<ChartData2>>(
-      future: Hive.openBox<ChartData2>('chartsData2'),
+    return FutureBuilder<Box<ChartData1>>(
+      future: Hive.openBox<ChartData1>('chartsData1'),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
@@ -20,23 +20,21 @@ class custom_box2_bar_chart extends StatelessWidget {
             );
           }
 
-          var box2 = snapshot.data;
-          if (box2 != null && box2.isNotEmpty) {
+          var box1 = snapshot.data;
+          if (box1 != null && box1.isNotEmpty) {
             return ListView.builder(
-              itemCount: box2.length,
+              itemCount: box1.length,
               itemBuilder: (context, index) {
-                var chartData2 = box2.getAt(index);
-                if (chartData2 != null &&
-                    chartData2.chartType == 'bar chart 1') {
+                var chartData1 = box1.getAt(index);
+                if (chartData1 != null &&
+                    chartData1.chartType == 'pie chart 1') {
                   return ListTile(
                     title: Center(
                       child: Container(
-                        height: 50,
-                        child: Text(
-                          chartData2.chartType,
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
+                        height: 35,
+                        child: Text(chartData1.chartType,
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
                       ),
                     ),
                     subtitle: SingleChildScrollView(
@@ -45,11 +43,8 @@ class custom_box2_bar_chart extends StatelessWidget {
                         height: 300,
                         child: Container(
                           height: 200,
-                          width: 400,
-                          child: BarChartDatas(
-                            xValue: chartData2.xValue,
-                            yValue: chartData2.yValue,
-                          ),
+                          width: 250,
+                          child: PieChartDatas(xValue: chartData1.xValue),
                         ),
                       ),
                     ),

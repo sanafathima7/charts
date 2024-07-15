@@ -1,6 +1,6 @@
-import 'package:charts/custom_box1_piechart.dart';
-import 'package:charts/custom_box2_barchart.dart';
-import 'package:charts/custom_box_line_chart.dart';
+import 'package:charts/widgets/custom_box1_piechart.dart';
+import 'package:charts/widgets/custom_box2_barchart.dart';
+import 'package:charts/widgets/custom_box_line_chart.dart';
 import 'package:flutter/material.dart';
 
 class SavedChart extends StatelessWidget {

@@ -1,4 +1,4 @@
-import 'package:charts/chart_data.dart';
+import 'package:charts/model/chart_data.dart';
 import 'package:charts/widgets/charts/linechart.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';

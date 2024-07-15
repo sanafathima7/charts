@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
-import 'package:charts/mainhomepage.dart';
+import 'package:charts/screen/mainhomepage.dart';
 import 'package:charts/widgets/charts/barchart.dart';
 import 'package:charts/widgets/charts/linechart.dart';
 import 'package:charts/widgets/charts/piechart.dart';
-import 'package:charts/chart_data.dart' as chartDataPackage;
-import 'package:charts/chart_data1.dart' as chartData1Package;
-import 'package:charts/chart_data2.dart' as chartData2Package;
+import 'package:charts/model/chart_data.dart' as chartDataPackage;
+import 'package:charts/model/chart_data1.dart' as chartData1Package;
+import 'package:charts/model/chart_data2.dart' as chartData2Package;
 
 class ViewChart extends StatefulWidget {
   const ViewChart({
@@ -28,11 +28,11 @@ class ViewChart extends StatefulWidget {
 class _ViewChartState extends State<ViewChart> {
   bool _isLoading = false;
   String? _errorMessage;
-  int _selectedIndex = 0; // Track the selected bottom navigation bar item
+  int _myIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      _myIndex = index;
     });
 
     if (index == 0) {
@@ -145,7 +145,7 @@ class _ViewChartState extends State<ViewChart> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
+        currentIndex: _myIndex,
         onTap: _onItemTapped,
         items: [
           BottomNavigationBarItem(

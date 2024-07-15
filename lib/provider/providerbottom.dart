@@ -1,6 +1,6 @@
-import 'package:charts/mainhomepage.dart';
-import 'package:charts/saveChart.dart';
-import 'package:charts/viewchart.dart';
+import 'package:charts/screen/mainhomepage.dart';
+import 'package:charts/screen/saveChart.dart';
+import 'package:charts/screen/viewchart.dart';
 import 'package:flutter/material.dart';
 
 class NavigationProvider extends ChangeNotifier {
